@@ -1,7 +1,9 @@
-import { lazy, Suspense } from "react";
+import { Fragment, lazy, Suspense } from "react";
 import { useLenis } from "./hooks/useLenis";
 import { useTheme } from "./hooks/useTheme";
 import { Route, Routes } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 const Navbar = lazy(() => import("./components/Navbar"));
 const Hero = lazy(() => import("./components/Hero"));
@@ -43,9 +45,13 @@ export default function App() {
     useLenis();
 
     return (
-        <Routes>
-            <Route index element={<Home />} />
-            <Route path="*" element={<Home />} />
-        </Routes>
+        <Fragment>
+            <Analytics />
+            <SpeedInsights />
+            <Routes>
+                <Route index element={<Home />} />
+                <Route path="*" element={<Home />} />
+            </Routes>
+        </Fragment>
     );
 };
