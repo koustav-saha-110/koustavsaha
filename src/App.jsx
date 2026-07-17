@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { useLenis } from "./hooks/useLenis";
 import { useTheme } from "./hooks/useTheme";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 const Navbar = lazy(() => import("./components/Navbar"));
 const Hero = lazy(() => import("./components/Hero"));
@@ -30,8 +30,8 @@ const Home = () => {
                 <Suspense fallback={<></>}><MarqueeAnimation /></Suspense>
                 <Suspense fallback={<></>}><Education /></Suspense>
                 <Suspense fallback={<></>}><Skills /></Suspense>
-                <Suspense fallback={<></>}><Hackathons /></Suspense>
                 <Suspense fallback={<></>}><Projects /></Suspense>
+                <Suspense fallback={<></>}><Hackathons /></Suspense>
                 <Suspense fallback={<></>}><Contact /></Suspense>
             </main>
             <Footer />
@@ -45,7 +45,7 @@ export default function App() {
     return (
         <Routes>
             <Route index element={<Home />} />
-            <Route path="*" element={<Navigate to={"/"} />} />
+            <Route path="*" element={<Home />} />
         </Routes>
     );
 };
