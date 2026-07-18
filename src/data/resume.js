@@ -113,7 +113,6 @@ const RESUME = {
             image: "https://images.unsplash.com/photo-1622549037543-49cf1ca0babc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTF8MHwxfHNlYXJjaHwxfHxzb2NpYWwlMjBtZWRpYSUyMGFwcCUyMFVJJTIwbW9ja3Vwc3xlbnwwfHx8fDE3ODQyNjYzODN8MA&ixlib=rb-4.1.0&q=85",
             github: "https://github.com/koustav-saha-110/smp",
             live: null,
-            span: "md:col-span-8",
         },
         {
             id: "02",
@@ -124,7 +123,6 @@ const RESUME = {
             image: "https://images.unsplash.com/photo-1763718528755-4bca23f82ac3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzl8MHwxfHNlYXJjaHw0fHxkYXNoYm9hcmQlMjBVSSUyMGludGVyZmFjZXxlbnwwfHx8fDE3ODQyNjYzODN8MA&ixlib=rb-4.1.0&q=85",
             github: "https://github.com/koustav-saha-110/ems",
             live: null,
-            span: "md:col-span-4",
         },
         {
             id: "03",
@@ -135,9 +133,9 @@ const RESUME = {
             image: "https://images.unsplash.com/photo-1603539947678-cd3954ed515d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjh8MHwxfHNlYXJjaHwyfHxtb2JpbGUlMjBhcHAlMjBpbnRlcmZhY2UlMjBmdXR1cmlzdGljfGVufDB8fHx8MTc4NDI2NjM4M3ww&ixlib=rb-4.1.0&q=85",
             github: "https://github.com/koustav-saha-110/ai-pocket-agent",
             live: null,
-            span: "md:col-span-12",
         },
     ],
+    HACKATHONS: [],
 };
 
 export const navSections = [
@@ -155,3 +153,4 @@ export const experience = RESUME.EXPERIENCE;
 export const education = RESUME.EDUCATION;
 export const skills = RESUME.SKILLS;
 export const projects = RESUME.PROJECTS;
+export const hackathons = RESUME.HACKATHONS;
