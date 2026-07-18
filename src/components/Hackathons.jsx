@@ -22,12 +22,14 @@ function HackathonCard({ hackathon, index }) {
                                 </div>
                             </div>
                         </div>
-                        {hackathon.awards && (
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-(--accent)/30 bg-(--accent)/10 shrink-0">
-                                <Trophy size={13} className="text-(--accent)" />
-                                <span className="font-mono-jb text-[10px] tracking-widest uppercase text-(--accent)">{hackathon.awards}</span>
-                            </div>
-                        )}
+                        {
+                            hackathon.awards && (
+                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-(--accent)/30 bg-(--accent)/10 shrink-0">
+                                    <Trophy size={13} className="text-(--accent)" />
+                                    <span className="font-mono-jb text-[10px] tracking-widest uppercase text-(--accent)">{hackathon.awards}</span>
+                                </div>
+                            )
+                        }
                     </div>
 
                     {/* Project Info */}
@@ -44,14 +46,11 @@ function HackathonCard({ hackathon, index }) {
                             Technologies
                         </h4>
                         <div className="flex flex-wrap gap-2">
-                            {hackathon.technologies.map((tech, idx) => (
-                                <span
-                                    key={idx}
-                                    className="px-3 py-1.5 rounded-full border border-(--border) text-[10px] font-mono-jb tracking-[0.25em] uppercase text-zinc-400 bg-(--surface)/80 group-hover:border-(--accent)/30 group-hover:text-zinc-300 transition-colors duration-300"
-                                >
-                                    {tech}
-                                </span>
-                            ))}
+                            {
+                                hackathon.technologies.map((tech, idx) => (
+                                    <span key={idx} className="px-3 py-1.5 rounded-full border border-(--border) text-[10px] font-mono-jb tracking-[0.25em] uppercase text-zinc-400 bg-(--surface)/80 group-hover:border-(--accent)/30 group-hover:text-zinc-300 transition-colors duration-300">{tech}</span>
+                                ))
+                            }
                         </div>
                     </div>
 
