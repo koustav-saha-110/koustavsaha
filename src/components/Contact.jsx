@@ -5,7 +5,7 @@ import { ArrowUpRight, GitBranch as Github, Link as Linkedin, Mail } from "lucid
 
 export default function Contact() {
     return (
-        <section id="contact" className="max-w-7xl mx-auto px-6 md:px-12 py-32 md:py-48" data-testid="section-contact">
+        <section id="contact" className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-24" data-testid="section-contact">
             <ChapterMarker number="07" label="Contact" />
             <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
                 <Reveal className="md:col-span-8">

@@ -7,7 +7,6 @@ function HackathonCard({ hackathon, index }) {
         <Reveal key={hackathon.id} delay={index * 0.1} className="w-full sm:w-[320px] md:w-90 lg:w-95">
             <article className="group relative border border-(--border) rounded-2xl overflow-hidden bg-(--surface)/60 backdrop-blur-md shadow-lg hover:shadow-xl hover:shadow-(--accent)/5 transition-all duration-500 h-full flex flex-col">
                 <div className="p-6 md:p-8 flex flex-col flex-1 gap-5">
-                    {/* Header: Event Name + Award Badge */}
                     <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 min-w-0">
                             <h3 className="font-serif text-2xl md:text-3xl leading-tight tracking-tighter">{hackathon.eventName}</h3>
@@ -32,14 +31,12 @@ function HackathonCard({ hackathon, index }) {
                         }
                     </div>
 
-                    {/* Project Info */}
                     <div className="flex-1">
                         <h4 className="font-mono-jb text-sm tracking-wider text-zinc-300 mb-2">Project</h4>
                         <p className="text-zinc-200 font-medium">{hackathon.projectTitle}</p>
                         <p className="text-sm text-zinc-400 leading-relaxed mt-3">{hackathon.description}</p>
                     </div>
 
-                    {/* Tech Stack */}
                     <div>
                         <h4 className="font-mono-jb text-sm tracking-wider text-zinc-300 mb-2 flex items-center gap-2">
                             <Code2 size={14} />
@@ -54,7 +51,6 @@ function HackathonCard({ hackathon, index }) {
                         </div>
                     </div>
 
-                    {/* Team Size */}
                     <div className="flex items-center gap-2 pt-2 border-t border-(--border)/50">
                         <Users size={14} className="text-zinc-400" />
                         <span className="font-mono-jb text-[10px] tracking-widest uppercase text-zinc-400">Team of {hackathon.teamSize}</span>
@@ -67,7 +63,7 @@ function HackathonCard({ hackathon, index }) {
 
 export default function Hackathons() {
     return (
-        <section id="hackathons" className="max-w-7xl mx-auto px-6 md:px-12 py-36 md:py-44" data-testid="section-hackathons">
+        <section id="hackathons" className="max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-28" data-testid="section-hackathons">
             <ChapterMarker number="06" label="Hackathons" />
 
             {hackathons && hackathons.length > 0 ? (
