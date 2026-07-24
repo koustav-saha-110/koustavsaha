@@ -4,6 +4,7 @@ import * as THREE from "three";
 import { OrbitControls } from "@react-three/drei";
 import { useTheme } from "../hooks/useTheme";
 
+// GLSL Vertex Shader: Ashima Arts 3D Simplex Noise deforming the trophy core
 const coreVertexShader = `
     uniform float uTime;
     varying float vDisplacement;
@@ -78,11 +79,10 @@ const coreVertexShader = `
     void main() {
         vNormal = normalize(normalMatrix * normal);
         
-        // Deform inner core geometry using simplex noise
-        float displacement = snoise(position * 2.2 + vec3(0.0, 0.0, uTime * 0.85));
+        float displacement = snoise(position * 2.5 + vec3(0.0, 0.0, uTime * 0.9));
         vDisplacement = displacement;
 
-        vec3 newPosition = position + normal * displacement * 0.18;
+        vec3 newPosition = position + normal * displacement * 0.16;
 
         vec4 mvPosition = modelViewMatrix * vec4(newPosition, 1.0);
         vViewPosition = -mvPosition.xyz;
@@ -90,22 +90,22 @@ const coreVertexShader = `
     }
 `;
 
+// GLSL Fragment Shader: Holographic gold/amber trophy highlights + Fresnel rim light
 const coreFragmentShader = `
     uniform vec3 uColorA;
     uniform vec3 uColorB;
+    uniform float uTime;
     varying float vDisplacement;
     varying vec3 vNormal;
     varying vec3 vViewPosition;
 
-    // Iridescent color shift function based on view angle and depth
-    vec3 getIridescence(vec3 normal, vec3 viewDir) {
+    vec3 getTrophyGlow(vec3 normal, vec3 viewDir) {
         float cosTheta = dot(normal, viewDir);
         float rim = 1.0 - max(cosTheta, 0.0);
         
-        // Create RGB shift cycles
-        float r = sin(rim * 3.1415 + 0.0) * 0.5 + 0.5;
-        float g = sin(rim * 3.1415 + 2.09) * 0.5 + 0.5;
-        float b = sin(rim * 3.1415 + 4.18) * 0.5 + 0.5;
+        float r = sin(rim * 3.1415 + uTime * 0.5) * 0.5 + 0.5;
+        float g = sin(rim * 3.1415 + 2.0 + uTime * 0.5) * 0.5 + 0.5;
+        float b = sin(rim * 3.1415 + 4.0 + uTime * 0.5) * 0.5 + 0.5;
         
         return vec3(r, g, b);
     }
@@ -114,24 +114,23 @@ const coreFragmentShader = `
         vec3 normal = normalize(vNormal);
         vec3 viewDir = normalize(vViewPosition);
 
-        // Fresnel outline rim glow
         float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 2.2);
 
-        // Mix gradient based on displacement
         float mixRatio = vDisplacement * 0.5 + 0.5;
         vec3 baseColor = mix(uColorA, uColorB, mixRatio);
 
-        // Blend with 30% iridescence
-        vec3 iridescent = getIridescence(normal, viewDir);
-        vec3 finalColor = mix(baseColor, iridescent, 0.3);
+        vec3 trophyShift = getTrophyGlow(normal, viewDir);
+        vec3 finalColor = mix(baseColor, trophyShift, 0.25);
 
-        // Specular glow highlight additions
-        finalColor += vec3(fresnel * 0.7);
+        // Add bright gold specular edge highlights
+        vec3 goldHighlight = vec3(0.96, 0.72, 0.20) * fresnel * 0.8;
+        finalColor += goldHighlight;
 
-        gl_FragColor = vec4(finalColor, 0.85);
+        gl_FragColor = vec4(finalColor, 0.88);
     }
 `;
 
+// GLSL shaders for the outer wireframe trophy hull
 const hullVertexShader = `
     varying vec2 vUv;
     void main() {
@@ -146,18 +145,18 @@ const hullFragmentShader = `
     varying vec2 vUv;
 
     void main() {
-        // Neon pulse cycle scanning the hull grid
-        float scan = sin(vUv.x * 12.0 - uTime * 2.8) * 0.5 + 0.5;
-        scan = pow(scan, 3.5);
+        float scan = sin(vUv.x * 16.0 + uTime * 3.2) * 0.5 + 0.5;
+        scan = pow(scan, 3.0);
 
-        vec3 color = mix(uColor, vec3(0.08, 0.82, 0.92), scan * 0.5);
-        float alpha = 0.2 + scan * 0.55;
+        vec3 gold = vec3(0.96, 0.72, 0.20);
+        vec3 color = mix(uColor, gold, scan * 0.6);
+        float alpha = 0.25 + scan * 0.55;
 
         gl_FragColor = vec4(color, alpha);
     }
 `;
 
-function CrystalCore({ activeColor }) {
+function TrophyCore({ activeColor }) {
     const hullRef = useRef();
     const coreRef = useRef();
 
@@ -168,7 +167,7 @@ function CrystalCore({ activeColor }) {
             uniforms: {
                 uTime: { value: 0 },
                 uColorA: { value: new THREE.Color(activeColor) },
-                uColorB: { value: new THREE.Color("#6366f1") },
+                uColorB: { value: new THREE.Color("#f59e0b") }, // Gold/amber accent
             },
             transparent: true,
             depthWrite: false,
@@ -194,10 +193,7 @@ function CrystalCore({ activeColor }) {
         coreMaterial.uniforms.uColorA.value.copy(colorA);
         hullMaterial.uniforms.uColor.value.copy(colorA);
 
-        const colorB = colorA.clone();
-        const hsl = { h: 0, s: 0, l: 0 };
-        colorB.getHSL(hsl);
-        colorB.setHSL((hsl.h + 0.097) % 1.0, hsl.s, hsl.l);
+        const colorB = new THREE.Color("#f59e0b");
         coreMaterial.uniforms.uColorB.value.copy(colorB);
     }, [activeColor, coreMaterial, hullMaterial]);
 
@@ -208,46 +204,48 @@ function CrystalCore({ activeColor }) {
         hullMaterial.uniforms.uTime.value = time;
 
         if (hullRef.current) {
-            hullRef.current.rotation.y = time * 0.12;
+            hullRef.current.rotation.y = time * 0.14;
             hullRef.current.rotation.x = time * 0.07;
         }
 
         if (coreRef.current) {
-            coreRef.current.rotation.y = -time * 0.22;
-            coreRef.current.rotation.x = -time * 0.09;
+            coreRef.current.rotation.y = -time * 0.24;
+            coreRef.current.rotation.z = time * 0.10;
         }
     });
 
     return (
         <group>
+            {/* Outer Octahedron Trophy Hull */}
             <mesh ref={hullRef}>
-                <dodecahedronGeometry args={[1.05, 0]} />
+                <octahedronGeometry args={[1.08, 0]} />
                 <primitive object={hullMaterial} attach="material" />
             </mesh>
 
+            {/* Inner Displaced Energy Core */}
             <mesh ref={coreRef}>
-                <icosahedronGeometry args={[0.62, 2]} />
+                <icosahedronGeometry args={[0.56, 4]} />
                 <primitive object={coreMaterial} attach="material" />
             </mesh>
         </group>
     );
 }
 
-export default function Projects3DCanvas() {
+export default function Hackathons3DCanvas() {
     const { theme } = useTheme();
     const activeColor = theme === "dark" ? "#3b82f6" : "#2563eb";
 
     return (
-        <div
+        <div 
             className="w-full h-48 md:h-56 relative z-10 overflow-hidden"
-            data-testid="projects-3d-canvas"
+            data-testid="hackathons-3d-canvas"
         >
-            <Canvas dpr={[1, 1.5]} gl={{ powerPreference: "high-performance", antialias: true }} camera={{ position: [0, 0, 2.6], fov: 50 }}>
+            <Canvas camera={{ position: [0, 0, 2.6], fov: 50 }}>
                 <ambientLight intensity={1.1} />
                 <directionalLight position={[5, 10, 5]} intensity={1.8} />
-                <directionalLight position={[-5, -5, -5]} intensity={1} color={activeColor} />
-
-                <CrystalCore activeColor={activeColor} />
+                <directionalLight position={[-5, -5, -5]} intensity={1} color="#f59e0b" />
+                
+                <TrophyCore activeColor={activeColor} />
                 <OrbitControls enableZoom={false} />
             </Canvas>
         </div>

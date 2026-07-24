@@ -43,7 +43,7 @@ export default function Skills() {
                                                         key={s}
                                                         whileHover={{ y: -2 }}
                                                         transition={{ duration: 0.2 }}
-                                                        className="px-3.5 py-2 rounded-xl border border-(--border) text-xs font-mono-jb tracking-wider text-zinc-300 bg-(--surface)/20 hover:text-(--accent) hover:border-(--accent)/50 hover:bg-(--accent)/5 transition-colors cursor-default select-none"
+                                                        className="px-3.5 py-2 rounded-xl border border-(--border) text-xs font-mono-jb tracking-wider dark:text-zinc-200 font-medium bg-(--surface)/30 hover:text-(--accent) hover:border-(--accent)/50 hover:bg-(--accent)/5 transition-colors cursor-default select-none"
                                                     >
                                                         {s}
                                                     </motion.span>

@@ -27,6 +27,14 @@ export function useLenis() {
     }, []);
 };
 
+export function stopLenis() {
+    lenisInstance?.stop();
+};
+
+export function startLenis() {
+    lenisInstance?.start();
+};
+
 export function scrollToId(id) {
     const el = document.getElementById(id);
     if (!el) return;
